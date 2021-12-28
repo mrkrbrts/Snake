@@ -1,4 +1,23 @@
 html, body {
     margin: 0;
-    padding: 0;
+    padding: 10;
+}
+
+.grid {
+    display: flex;
+    flex-wrap: wrap;
+    width: 200px;
+    height: 200px;
+    border: solid black 2px;
+}
+
+.tile {
+    width: 20px;
+    height: 20px;
+    /* border: 1px solid green */
+}
+
+.snake {
+    background-color: green;
+    /* border: solid white 1px; */
 }
