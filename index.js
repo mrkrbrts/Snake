@@ -1,15 +1,38 @@
+////////// QUERY SELECTORS //////////
 const grid = document.querySelector(".grid")
 const startBtn = document.querySelector("#start-btn")
+const endBtn = document.querySelector("#end-btn")
 const score = document.querySelector("score")
 
-let gridWidth = 10;
+
+////////// INITIALISE GRID //////////
+const gridWidth = 10;
 let tiles = []
-let currentSnake = [2,1,0]
+createGrid()
 
-let direction = 1;
 
+////////// SNAKE STARTING CONDITION //////////
+let currentSnake = [2,1,0] // starts snake in top-left
+let direction = 1; // starts snake moving right
+let interval = 800 // timer in ms
+
+
+////////// BUTTONS //////////
+startBtn.addEventListener("click", function() {
+    eraseGrid()
+    renderSnake()
+    gameStart()
+})
+
+endBtn.addEventListener("click", function() {
+    gameEnd()
+    eraseGrid()
+})
+
+
+////////// GRID FUNCTIONS //////////
 function createGrid() {
-    for (let i = 0; i < 100; i++) {
+    for (let i = 0; i < gridWidth*gridWidth; i++) {
         const tile = document.createElement("div")
         //add class ".tile" to individual tile
         tile.classList.add("tile")
@@ -20,23 +43,43 @@ function createGrid() {
     }
 }
 
-createGrid()
-
-// add "snake" class style to each index of the "tiles" array
-currentSnake.forEach(i => tiles[i].classList.add("snake"))
-
-function move() {
-    const tail = currentSnake.pop()
-    //pass "tail" through "tiles" array, remove the "snake" class styling
-    tiles[tail].classList.remove("snake")
-
-    const head = currentSnake.unshift(currentSnake[0] + direction)
-    tiles[currentSnake[0]].classList.add("snake")
-
-    console.log(currentSnake)
+function eraseGrid() {
+    Array.from(document.querySelectorAll(".tile")).forEach((el) => el.classList.remove("snake")) 
 }
 
+
+////////// SNAKE FUNCTIONS AND CONTROLS //////////
 document.addEventListener("keyup", control)
+
+function renderSnake() {
+    currentSnake = [2,1,0]
+    // add "snake" class style to each index of the "tiles" array
+    currentSnake.forEach(i => tiles[i].classList.add("snake"))
+    direction = 1;
+}
+
+function move() {
+    if ( // check if snake will hit walls or itself
+        (currentSnake[0] + gridWidth >= 100 && direction === gridWidth)  // snake hits bottom wall
+        || (currentSnake[0] % 10 === 9 && direction === 1) // snake hits right wall
+        || (currentSnake[0] % 10 === 0 && direction === -1) // snake hits left wall
+        || (currentSnake[0] - gridWidth <=0 && direction === -gridWidth) // snake hits top wall
+        || (tiles[currentSnake[0] + direction].classList.contains("snake")) // snake eats itself
+        ) {
+            // if hit, game over
+            console.log(currentSnake)
+            gameOver()
+        } 
+
+        else { 
+            const tail = currentSnake.pop()
+            //pass "tail" through "tiles" array, remove the "snake" class styling
+            tiles[tail].classList.remove("snake")
+
+            const head = currentSnake.unshift(currentSnake[0] + direction)
+            tiles[currentSnake[0]].classList.add("snake")
+        }
+}
 
 function control(e) {
     switch (event.key) {
@@ -66,12 +109,20 @@ function control(e) {
 }
 
 
+////////// GAME STATES //////////
+function gameStart() {
+    timerId = setInterval(move, interval)
+    startBtn.style.display = "none";
+    endBtn.style.display = "inline";
+}
 
-startBtn.addEventListener("click", function() {
-    console.log("button is clicked")
-})
+function gameEnd() {
+    clearInterval(timerId);
+    endBtn.style.display = "none";
+    startBtn.style.display = "inline";
+}
 
-
-// let timerId = setInterval(move, 1000)
-
-// startBtn.addEventListener("click", clearInterval(timerId))
+function gameOver() {
+    console.log("game over")
+    gameEnd()
+}

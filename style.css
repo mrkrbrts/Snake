@@ -21,3 +21,7 @@ html, body {
     background-color: green;
     /* border: solid white 1px; */
 }
+
+#end-btn {
+    display: none;
+}
