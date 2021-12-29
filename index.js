@@ -2,7 +2,8 @@
 const grid = document.querySelector(".grid")
 const startBtn = document.querySelector("#start-btn")
 const endBtn = document.querySelector("#end-btn")
-const score = document.querySelector("score")
+const scoreDisplay = document.querySelector("#score")
+let score = 0;
 
 
 ////////// INITIALISE GRID //////////
@@ -15,12 +16,12 @@ createGrid()
 let currentSnake = [2,1,0] // starts snake in top-left
 let direction = 1; // starts snake moving right
 let interval = 800 // timer in ms
+let pelletIndex = 0 // set pellets
 
 
 ////////// BUTTONS //////////
 startBtn.addEventListener("click", function() {
     eraseGrid()
-    renderSnake()
     gameStart()
 })
 
@@ -44,7 +45,7 @@ function createGrid() {
 }
 
 function eraseGrid() {
-    Array.from(document.querySelectorAll(".tile")).forEach((el) => el.classList.remove("snake")) 
+    Array.from(document.querySelectorAll(".tile")).forEach((el) => el.classList.remove("snake","pellet")) 
 }
 
 
@@ -70,15 +71,38 @@ function move() {
             console.log(currentSnake)
             gameOver()
         } 
+    else { 
+        // remove last element from currentSnake array
+        const tail = currentSnake.pop()
+        // remove the "snake" class styling from tail
+        tiles[tail].classList.remove("snake")
+        // add tile to currentSnake array in direction it's heading
+        const head = currentSnake.unshift(currentSnake[0] + direction)
+        // add styling to new tile where head will be
+        tiles[currentSnake[0]].classList.add("snake")
+    }
 
-        else { 
-            const tail = currentSnake.pop()
-            //pass "tail" through "tiles" array, remove the "snake" class styling
-            tiles[tail].classList.remove("snake")
+    
+        
 
-            const head = currentSnake.unshift(currentSnake[0] + direction)
-            tiles[currentSnake[0]].classList.add("snake")
-        }
+
+    if (tiles[currentSnake[0]].classList.contains("pellet")) {
+
+        //remove the class of apple
+        tiles[currentSnake[0]].classList.remove("pellet")        
+        //grow our snake by adding class of snake to it
+        
+        //grow our snake array
+        
+        //generate a new apple
+        generatePellet()       
+        //add one to the score
+        addScore(1)    
+        //speed up our snake
+
+
+
+    }
 }
 
 function control(e) {
@@ -108,9 +132,44 @@ function control(e) {
     }
 }
 
+////////// SCORING //////////
+function randomNumber() {
+    return Math.floor((Math.random() * 10))
+}
+
+function generatePellet() {
+    do {
+        pelletIndex = randomNumber()
+    } while (tiles[pelletIndex].classList.contains("snake"))
+    tiles[pelletIndex].classList.add("pellet")
+}
+
+function checkStartPellet() {
+    if (tiles[0].classList.contains("pellet") || tiles[1].classList.contains("pellet") || tiles[2].classList.contains("pellet") || tiles[3].classList.contains("pellet")) {
+        document.querySelector(".pellet").classList.remove("pellet")
+        generatePellet()
+        checkStartPellet()
+    }
+}
+
+function addScore(num) {
+    score += num;
+    scoreDisplay.innerHTML = score;
+}
+
+function resetScore() {
+    score = 0;
+    scoreDisplay.innerHTML = score
+}
+
 
 ////////// GAME STATES //////////
 function gameStart() {
+    resetScore()
+    generatePellet()
+    checkStartPellet()
+    renderSnake()
+    interval = 800;
     timerId = setInterval(move, interval)
     startBtn.style.display = "none";
     endBtn.style.display = "inline";

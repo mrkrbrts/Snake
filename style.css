@@ -22,6 +22,11 @@ html, body {
     /* border: solid white 1px; */
 }
 
+.pellet {
+    background-color: blue;
+    border-radius: 10px;
+}
+
 #end-btn {
     display: none;
 }
