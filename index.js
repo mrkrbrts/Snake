@@ -66,41 +66,30 @@ function move() {
         || (currentSnake[0] % 10 === 0 && direction === -1) // snake hits left wall
         || (currentSnake[0] - gridWidth <=0 && direction === -gridWidth) // snake hits top wall
         || (tiles[currentSnake[0] + direction].classList.contains("snake")) // snake eats itself
-        ) {
-            // if hit, game over
-            console.log(currentSnake)
-            gameOver()
-        } 
-    else { 
-        // remove last element from currentSnake array
-        const tail = currentSnake.pop()
-        // remove the "snake" class styling from tail
-        tiles[tail].classList.remove("snake")
-        // add tile to currentSnake array in direction it's heading
-        const head = currentSnake.unshift(currentSnake[0] + direction)
-        // add styling to new tile where head will be
-        tiles[currentSnake[0]].classList.add("snake")
+    ) {
+        // if hit, game over
+        currentSnake.shift()
+        console.log(currentSnake)
+        gameOver()
     }
+     
+  
+    // move the snake
+    const tail = currentSnake.pop() // remove last element from currentSnake array
+    tiles[tail].classList.remove("snake") // remove the "snake" class styling from tail
+    const head = currentSnake.unshift(currentSnake[0] + direction) // add tile to currentSnake array in direction it's heading
+    tiles[currentSnake[0]].classList.add("snake") // add styling to new tile where head will be
 
-    
+
         
-
 
     if (tiles[currentSnake[0]].classList.contains("pellet")) {
-
-        //remove the class of apple
-        tiles[currentSnake[0]].classList.remove("pellet")        
-        //grow our snake by adding class of snake to it
-        
-        //grow our snake array
-        
-        //generate a new apple
-        generatePellet()       
-        //add one to the score
-        addScore(1)    
+        tiles[currentSnake[0]].classList.remove("pellet") //remove the class of apple       
+        tiles[tail].classList.add("snake") //grow our snake by adding class of snake to it
+        currentSnake.push(tail) //grow our snake array
+        generatePellet() //generate a new apple      
+        addScore(1) //add one to the score    
         //speed up our snake
-
-
 
     }
 }
