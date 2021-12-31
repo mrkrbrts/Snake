@@ -123,7 +123,7 @@ function control(e) {
 
 ////////// SCORING //////////
 function randomNumber() {
-    return Math.floor((Math.random() * 10))
+    return Math.floor((Math.random() * (gridWidth*gridWidth)))
 }
 
 function generatePellet() {
