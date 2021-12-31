@@ -64,7 +64,7 @@ function move() {
         (currentSnake[0] + gridWidth >= 100 && direction === gridWidth)  // snake hits bottom wall
         || (currentSnake[0] % 10 === 9 && direction === 1) // snake hits right wall
         || (currentSnake[0] % 10 === 0 && direction === -1) // snake hits left wall
-        || (currentSnake[0] - gridWidth <=0 && direction === -gridWidth) // snake hits top wall
+        || (currentSnake[0] - gridWidth <0 && direction === -gridWidth) // snake hits top wall
         || (tiles[currentSnake[0] + direction].classList.contains("snake")) // snake eats itself
     ) {
         // if hit, game over
