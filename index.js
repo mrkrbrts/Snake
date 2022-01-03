@@ -15,7 +15,8 @@ createGrid()
 ////////// SNAKE STARTING CONDITION //////////
 let currentSnake = [2,1,0] // starts snake in top-left
 let direction = 1; // starts snake moving right
-let interval = 800 // timer in ms
+let interval = 1000 // timer in ms
+let speed = 0.9 // accelation multiplier 
 let pelletIndex = 0 // set pellets
 
 
@@ -84,13 +85,15 @@ function move() {
         
 
     if (tiles[currentSnake[0]].classList.contains("pellet")) {
-        tiles[currentSnake[0]].classList.remove("pellet") //remove the class of apple       
-        tiles[tail].classList.add("snake") //grow our snake by adding class of snake to it
-        currentSnake.push(tail) //grow our snake array
-        generatePellet() //generate a new apple      
-        addScore(1) //add one to the score    
+        tiles[currentSnake[0]].classList.remove("pellet") // remove the class of apple       
+        tiles[tail].classList.add("snake") // grow our snake by adding class of snake to it
+        currentSnake.push(tail) // grow our snake array
+        generatePellet() // generate a new apple      
+        addScore(1) // add one to the score    
         //speed up our snake
-
+        interval = interval * speed;// decrease time before next movement
+        resetTimer() // reset timer to account for new timer
+        
     }
 }
 
@@ -98,23 +101,31 @@ function control(e) {
     switch (event.key) {
         case "Down" :
         case "ArrowDown" : 
-            console.log("down arrow pressed")
-            direction =+gridWidth;
+            if (direction != -gridWidth) {
+                console.log("down arrow pressed")
+                direction =+gridWidth;
+            }
             break;
         case "Up" :
         case "ArrowUp" : 
-            console.log("up arrow pressed")
-            direction =-gridWidth
+            if (direction != gridWidth) {
+                console.log("up arrow pressed")
+                direction =-gridWidth
+            }
             break;
         case "Left" :
         case "ArrowLeft" : 
-            console.log("left arrow pressed");
-            direction = -1; 
+            if (direction != 1) {
+                console.log("left arrow pressed");
+                direction = -1; 
+            }
             break;
         case "Right" :
-        case "ArrowRight" : 
-            console.log("right arrow pressed")
-            direction = 1;
+        case "ArrowRight" :
+            if (direction != -1) {
+                console.log("right arrow pressed")
+                direction = 1;
+            } 
             break;
         default:
             return
@@ -158,7 +169,7 @@ function gameStart() {
     generatePellet()
     checkStartPellet()
     renderSnake()
-    interval = 800;
+    interval = 1000;
     timerId = setInterval(move, interval)
     startBtn.style.display = "none";
     endBtn.style.display = "inline";
@@ -173,4 +184,9 @@ function gameEnd() {
 function gameOver() {
     console.log("game over")
     gameEnd()
+}
+
+function resetTimer() {
+    clearInterval(timerId)
+    timerId = setInterval(move, interval)
 }

@@ -1,7 +1,12 @@
 html, body {
     margin: 0;
     padding: 10;
-    background-color: whitesmoke;
+    background-color: #388F1D;
+    font-family: 'Roboto Mono', monospace;
+}
+
+h1 {
+    font-size: 2rem;
 }
 
 .grid {
@@ -9,6 +14,7 @@ html, body {
     flex-wrap: wrap;
     width: 400px;
     height: 400px;
+    background-color: #5DA424;
     border: solid black 2px;
 }
 
@@ -19,7 +25,7 @@ html, body {
 }
 
 .snake {
-    background-color: green;
+    background-color: #13280B;
     /* border: solid white 1px; */
 }
 
@@ -30,4 +36,10 @@ html, body {
 
 #end-btn {
     display: none;
+}
+
+button {
+    font-size: 1.5rem;
+    height: 50px;
+    width: 150px;
 }
