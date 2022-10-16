@@ -15,7 +15,7 @@ createGrid()
 ////////// SNAKE STARTING CONDITION //////////
 let currentSnake = [2,1,0] // starts snake in top-left
 let direction = 1; // starts snake moving right
-let interval = 1000 // timer in ms
+let interval = 900 // timer in ms
 let speed = 0.9 // accelation multiplier 
 let pelletIndex = 0 // set pellets
 
